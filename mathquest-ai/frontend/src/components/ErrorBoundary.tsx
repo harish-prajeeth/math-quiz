@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { GameButton } from './game/GameButton';
+import { GameButton } from './GameButton';
 import { RotateCcw } from 'lucide-react';
 
 interface Props {
@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="min-h-[100svh] flex flex-col items-center justify-center p-6 bg-slate-950 text-white text-center">
-          <div className="max-w-md w-full bg-stone-900 border-2 border-amber-400 p-8 rounded-3xl shadow-2xl">
+          <div className="max-w-md w-full bg-stone-900 border-3 border-amber-500 p-8 rounded-3xl">
             <div className="w-16 h-16 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center text-3xl font-black mx-auto mb-4">
               !
             </div>

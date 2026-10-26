@@ -11,7 +11,7 @@ export function Stars({ count, size = 32 }: { count: number; size?: number }) {
           strokeWidth={3}
           className={`transition-transform duration-300 ${
             i < count
-              ? "fill-[var(--world-pop)] scale-110 drop-shadow-[0_2px_0_#1B1F4B]"
+              ? "fill-[var(--world-pop)] scale-110"
               : "fill-white opacity-40"
           }`}
         />

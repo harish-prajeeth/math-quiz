@@ -76,11 +76,7 @@ export default function MapPage() {
             <div className="relative py-8">
               {/* Connecting Trail Line */}
               <div
-                className="absolute left-1/2 top-12 bottom-12 w-3 -translate-x-1/2 rounded-full border-2 border-ink pointer-events-none"
-                style={{
-                  backgroundColor: "var(--world-glow)",
-                  filter: "drop-shadow(0 0 8px var(--world-glow))",
-                }}
+                className="absolute left-1/2 top-12 bottom-12 w-3 -translate-x-1/2 rounded-full border-2 border-ink pointer-events-none bg-[var(--world-glow)]"
               />
 
               {/* Mission Nodes */}
@@ -126,7 +122,7 @@ export default function MapPage() {
                                   strokeWidth={3}
                                   className={
                                     n < s
-                                      ? "fill-[var(--world-pop)] drop-shadow-[0_1px_0_#1B1F4B]"
+                                      ? "fill-[var(--world-pop)]"
                                       : "fill-white"
                                   }
                                 />
@@ -139,7 +135,7 @@ export default function MapPage() {
                       {/* Side description / standard details */}
                       <div className="flex-1 hidden sm:block">
                         <Panel className={`p-4 max-w-xs ${isLeft ? "mr-auto text-left" : "ml-auto text-right"}`}>
-                          <div className="text-xs font-bold uppercase tracking-wider text-ink/70">
+                          <div className="text-sm font-bold text-ink/80">
                             Objective
                           </div>
                           <p className="text-sm font-medium text-ink mt-0.5 line-clamp-2">

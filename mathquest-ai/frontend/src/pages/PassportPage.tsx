@@ -99,7 +99,7 @@ export default function PassportPage() {
                 return (
                   <div
                     key={f.name}
-                    className={`tile p-3 text-center rounded-xl bg-white relative transition-all ${
+                    className={`tile p-3 text-center rounded-xl bg-white relative transition-[transform,opacity,border-color] ${
                       unlocked ? "border-solid" : "border-dashed opacity-60"
                     }`}
                   >
@@ -147,7 +147,7 @@ export default function PassportPage() {
                 return (
                   <div
                     key={badge.id}
-                    className={`tile p-4 rounded-2xl flex flex-col justify-between transition-all ${
+                    className={`tile p-4 rounded-2xl flex flex-col justify-between transition-[transform,opacity,border-color] ${
                       isEarned
                         ? "bg-[var(--world-pop)] border-solid scale-[1.01]"
                         : "bg-white/70 border-dashed border-ink/40 opacity-70"
@@ -155,11 +155,15 @@ export default function PassportPage() {
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-3xl" role="img" aria-label="trophy icon">
-                          {isEarned ? badge.icon || "🏆" : "🔒"}
-                        </span>
+                        <div className="size-10 rounded-xl bg-white/80 border-2 border-ink flex items-center justify-center">
+                          {isEarned ? (
+                            <Trophy className="w-6 h-6 text-ink" />
+                          ) : (
+                            <Lock className="w-5 h-5 text-ink/40" />
+                          )}
+                        </div>
                         {isEarned ? (
-                          <span className="text-xs font-bold uppercase tracking-wider bg-white px-2 py-0.5 rounded-full border border-ink text-ink">
+                          <span className="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-ink text-ink">
                             Unlocked
                           </span>
                         ) : (
@@ -178,7 +182,7 @@ export default function PassportPage() {
                     </div>
 
                     {!isEarned && (
-                      <div className="mt-3 pt-2 border-t border-ink/20 text-[11px] font-semibold text-ink/60 italic">
+                      <div className="mt-3 p-2 bg-slate-100 rounded-lg text-xs font-semibold text-ink/70">
                         Hint: {badge.description}
                       </div>
                     )}

@@ -42,17 +42,52 @@ function AsteroidBeast({ defeated }: { defeated: boolean }) {
   );
 }
 
-export function Boss({ world, hits, defeated }: { world: "jungle" | "space"; hits: number; defeated: boolean }) {
+export function Boss({
+  world,
+  hits,
+  defeated,
+  lastDamage,
+}: {
+  world: "jungle" | "space";
+  hits: number;
+  defeated: boolean;
+  lastDamage?: number | null;
+}) {
   const allowed = useMotionAllowed();
   const name = world === "space" ? "Asteroid Beast" : "Vine Guardian";
   return (
-    <motion.div key={hits} initial={{ x: 0 }}
-      animate={hits > 0 && allowed ? { x: [0, -10, 10, -6, 6, 0] } : { x: 0 }}
-      transition={{ duration: 0.4 }} className={defeated ? "opacity-60 grayscale" : ""}>
-      <svg viewBox="0 0 160 140" role="img" aria-label={`${name}${defeated ? ", defeated" : ""}`}
-           className="mx-auto h-28 lg:h-56">
-        {world === "space" ? <AsteroidBeast defeated={defeated} /> : <VineGuardian defeated={defeated} />}
-      </svg>
-    </motion.div>
+    <div className="relative">
+      <motion.div
+        key={hits}
+        initial={{ x: 0 }}
+        animate={hits > 0 && allowed ? { x: [0, -10, 10, -6, 6, 0] } : { x: 0 }}
+        transition={{ duration: 0.4 }}
+        className={defeated ? "opacity-60 grayscale" : ""}
+      >
+        <svg
+          viewBox="0 0 160 140"
+          role="img"
+          aria-label={`${name}${defeated ? ", defeated" : ""}`}
+          className="mx-auto h-28 lg:h-56"
+        >
+          {world === "space" ? (
+            <AsteroidBeast defeated={defeated} />
+          ) : (
+            <VineGuardian defeated={defeated} />
+          )}
+        </svg>
+      </motion.div>
+      {lastDamage != null && lastDamage > 0 && (
+        <motion.div
+          key={`dmg-${hits}`}
+          initial={{ opacity: 1, y: 0, scale: 0.8 }}
+          animate={{ opacity: 0, y: -40, scale: 1.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 font-display text-2xl font-black text-oops"
+        >
+          -{lastDamage} HP
+        </motion.div>
+      )}
+    </div>
   );
 }

@@ -6,7 +6,7 @@ import { GameButton } from "../components/GameButton";
 import { Avatar } from "../art/avatars";
 import { useGame } from "../context/GameContext";
 import { api } from "../services/api";
-import { Sparkles, Compass, Rocket } from "lucide-react";
+import { Sparkles, Compass, Rocket, Lightbulb, Swords } from "lucide-react";
 
 export default function StartPage() {
   const navigate = useNavigate();
@@ -77,9 +77,9 @@ export default function StartPage() {
                 <button
                   type="button"
                   onClick={() => handleSelectGrade(5)}
-                  className={`tile text-left p-4 rounded-2xl relative overflow-hidden transition-all ${
+                  className={`tile text-left p-4 rounded-2xl relative overflow-hidden transition-[transform,opacity,border-color] ${
                     state.grade === 5
-                      ? "ring-4 ring-lime scale-[1.02] shadow-[0_0_20px_rgba(124,255,107,0.5)]"
+                      ? "ring-4 ring-lime scale-[1.02]"
                       : "opacity-80 hover:opacity-100"
                   }`}
                   style={{
@@ -92,14 +92,14 @@ export default function StartPage() {
                     <Compass className="w-5 h-5 text-lime" />
                     <span className="font-display text-lg text-lime">Jungle</span>
                   </div>
-                  <div className="text-xs uppercase tracking-wider font-bold text-lime/80 mb-2">
+                  <div className="text-sm font-bold text-lime/90 mb-2">
                     Grade 5 Quest
                   </div>
                   <p className="text-xs text-paper/80 font-medium">
                     Fractions, Decimals, Volume & the Vine Guardian
                   </p>
                   {state.grade === 5 && (
-                    <div className="absolute top-2 right-2 size-3 rounded-full bg-lime shadow-[0_0_8px_#7CFF6B]" />
+                    <div className="absolute top-2 right-2 size-3 rounded-full bg-lime" />
                   )}
                 </button>
 
@@ -107,9 +107,9 @@ export default function StartPage() {
                 <button
                   type="button"
                   onClick={() => handleSelectGrade(6)}
-                  className={`tile text-left p-4 rounded-2xl relative overflow-hidden transition-all ${
+                  className={`tile text-left p-4 rounded-2xl relative overflow-hidden transition-[transform,opacity,border-color] ${
                     state.grade === 6
-                      ? "ring-4 ring-comet scale-[1.02] shadow-[0_0_20px_rgba(91,225,230,0.5)]"
+                      ? "ring-4 ring-comet scale-[1.02]"
                       : "opacity-80 hover:opacity-100"
                   }`}
                   style={{
@@ -122,14 +122,14 @@ export default function StartPage() {
                     <Rocket className="w-5 h-5 text-comet" />
                     <span className="font-display text-lg text-comet">Space</span>
                   </div>
-                  <div className="text-xs uppercase tracking-wider font-bold text-comet/80 mb-2">
+                  <div className="text-sm font-bold text-comet/90 mb-2">
                     Grade 6 Mission
                   </div>
                   <p className="text-xs text-paper/80 font-medium">
                     Ratios, Expressions, Geometry & the Asteroid Beast
                   </p>
                   {state.grade === 6 && (
-                    <div className="absolute top-2 right-2 size-3 rounded-full bg-comet shadow-[0_0_8px_#5BE1E6]" />
+                    <div className="absolute top-2 right-2 size-3 rounded-full bg-comet" />
                   )}
                 </button>
               </div>
@@ -179,8 +179,9 @@ export default function StartPage() {
                 required
                 className="w-full px-4 py-3 rounded-xl border-[3px] border-ink bg-white font-semibold text-ink focus:outline-none focus:ring-4 focus:ring-lime"
               />
-              <p className="text-xs text-ink/70 font-medium">
-                💡 Use a fun nickname, not your real name.
+              <p className="text-xs text-ink/75 font-medium flex items-center gap-1.5">
+                <Lightbulb className="size-4 text-mango shrink-0" />
+                <span>Use a fun nickname, not your real name.</span>
               </p>
             </div>
 
@@ -197,7 +198,8 @@ export default function StartPage() {
               loading={loading}
               className="w-full py-4 text-xl"
             >
-              Start Adventure ⚔️
+              <span>Start Adventure</span>
+              <Swords className="size-5" />
             </GameButton>
           </form>
         </Panel>

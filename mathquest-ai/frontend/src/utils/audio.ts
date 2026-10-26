@@ -4,13 +4,16 @@ class AudioManager {
   private enabled: boolean = true;
 
   constructor() {
-    const saved = localStorage.getItem('mathquest_sound');
-    if (saved !== null) {
-      this.enabled = saved === 'true';
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem('mathquest_sound');
+      if (saved !== null) {
+        this.enabled = saved === 'true';
+      }
     }
   }
 
   private initCtx() {
+    if (typeof window === 'undefined') return;
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (AudioCtx) {
@@ -24,7 +27,9 @@ class AudioManager {
 
   public toggleSound(): boolean {
     this.enabled = !this.enabled;
-    localStorage.setItem('mathquest_sound', String(this.enabled));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('mathquest_sound', String(this.enabled));
+    }
     if (this.enabled) {
       this.playClick();
     }

@@ -17,7 +17,7 @@ export function Hud() {
   const frame = frameFor(level);
 
   return (
-    <header className="sticky top-0 z-30 bg-[var(--world-arena)] px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+    <header data-ui="true" className="sticky top-0 z-30 bg-[var(--world-arena)] px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
       <div className="mx-auto flex max-w-5xl items-center gap-3">
         <Link to="/map" aria-label="Back to the map" className="rounded-full border-4 bg-paper shrink-0" style={{ borderColor: frame.color }}>
           <Avatar id={state.avatarId} size={48} />

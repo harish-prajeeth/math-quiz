@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Swords } from "lucide-react";
 import { PageScene } from "../components/PageScene";
 import { Hud } from "../components/Hud";
 import { Panel } from "../components/Panel";
@@ -70,7 +71,10 @@ export default function KitPage() {
                     setCombo((c) => c + 1);
                   }}
                 >
-                  Hit Boss ⚔️
+                  <span className="flex items-center gap-1.5">
+                    <span>Hit Boss</span>
+                    <Swords className="size-4" />
+                  </span>
                 </GameButton>
                 <GameButton
                   variant="secondary"

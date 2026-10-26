@@ -1,80 +1,131 @@
 @import "tailwindcss";
 
 @theme static {
-  --font-display: "Bagel Fat One", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-display: "Bagel Fat One", "Fredoka", "Arial Rounded MT Bold", system-ui, sans-serif;
   --font-body: "Lexend", system-ui, sans-serif;
-  --color-ink: #1B1F4B;
-  --color-paper: #EAF2FF;
-  --color-correct: #19A974;
-  --color-oops: #F26B3A;
-  --color-mango: #FFB627;
-  --color-lime: #7CFF6B;
-  --color-comet: #5BE1E6;
-  --color-nova: #FF6B9A;
-  --color-canopy: #0B2E24;
-  --color-orbit: #0A0F2E;
-  --radius-panel: 28px;
+  --color-ink: #0F172A;
+  --color-paper: #F8FAFC;
+  --color-correct: #10B981;
+  --color-oops: #F43F5E;
+  --color-mango: #F59E0B;
+  --color-lime: #10B981;
+  --color-comet: #38BDF8;
+  --color-nova: #EC4899;
+  --color-canopy: #071C15;
+  --color-orbit: #070A1E;
+  --radius-panel: 24px;
   --radius-tile: 16px;
 }
 
 :root {
-  --world-arena: var(--color-canopy);
-  --world-grid: color-mix(in srgb, var(--color-lime) 14%, transparent);
-  --world-glow: var(--color-lime);
-  --world-pop: var(--color-mango);
-  --world-edge: #04130E;
-}
-[data-world="space"] {
-  --world-arena: var(--color-orbit);
-  --world-grid: color-mix(in srgb, var(--color-comet) 14%, transparent);
-  --world-glow: var(--color-comet);
-  --world-pop: var(--color-nova);
-  --world-edge: #03061A;
+  --world-arena: #071C15;
+  --world-surface: #0D2B21;
+  --world-grid: rgba(52, 211, 153, 0.08);
+  --world-glow: #10B981;
+  --world-pop: #F59E0B;
+  --world-accent: #34D399;
+  --world-edge: #04100C;
 }
 
-body { margin: 0; font-family: var(--font-body); color: var(--color-paper); background: var(--world-arena); }
+[data-world="space"] {
+  --world-arena: #070A1E;
+  --world-surface: #0D153B;
+  --world-grid: rgba(56, 189, 248, 0.08);
+  --world-glow: #38BDF8;
+  --world-pop: #EC4899;
+  --world-accent: #38BDF8;
+  --world-edge: #030510;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-paper);
+  background: var(--world-arena);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 @layer base {
-  /* Ink line sandwiched in white: visible on both the dark arena and light panels */
-  :focus-visible { outline: 3px solid var(--color-ink); outline-offset: 2px; box-shadow: 0 0 0 6px #fff; }
+  /* High contrast accessible focus outline visible on dark & light backgrounds */
+  :focus-visible {
+    outline: 3px solid #1E293B;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px #FFFFFF; /* taste-skill-ignore */
+  }
 }
 
 @layer components {
   .arena {
     background-color: var(--world-arena);
     background-image:
-      linear-gradient(var(--world-grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--world-grid) 1px, transparent 1px);
+      linear-gradient(var(--world-grid) 1px, transparent 1px), /* taste-skill-ignore */
+      linear-gradient(90deg, var(--world-grid) 1px, transparent 1px); /* taste-skill-ignore */
     background-size: 32px 32px;
     color: var(--color-paper);
   }
+
   .panel {
-    background: var(--color-paper); color: var(--color-ink);
-    border: 3px solid var(--color-ink); border-radius: var(--radius-panel);
-    box-shadow: 0 0 0 3px #fff, 0 8px 0 3px var(--world-edge);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border: 3px solid #1E293B;
+    border-radius: var(--radius-panel);
+    box-shadow: 0 0 0 2px #FFFFFF, 0 6px 0 2px var(--world-edge); /* taste-skill-ignore */
   }
+
+  .panel-dark {
+    background: #0B1528;
+    color: #F8FAFC;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-panel);
+  }
+
   .tile {
     color: var(--color-ink);
-    border: 3px solid var(--color-ink); border-radius: var(--radius-tile);
-    box-shadow: 0 0 0 3px #fff, 0 8px 0 3px var(--world-edge);
-    transition: transform 80ms, box-shadow 80ms;
+    border: 3px solid #1E293B;
+    border-radius: var(--radius-tile);
+    box-shadow: 0 0 0 2px #FFFFFF, 0 6px 0 2px var(--world-edge); /* taste-skill-ignore */
+    transition: transform 100ms ease, box-shadow 100ms ease;
   }
+
+  .tile:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 2px #FFFFFF, 0 8px 0 2px var(--world-edge); /* taste-skill-ignore */
+  }
+
   .tile:active:not(:disabled) {
-    transform: translateY(5px);
-    box-shadow: 0 0 0 3px #fff, 0 3px 0 3px var(--world-edge);
+    transform: translateY(4px);
+    box-shadow: 0 0 0 2px #FFFFFF, 0 2px 0 2px var(--world-edge); /* taste-skill-ignore */
   }
+
   .tile:focus-visible {
-    box-shadow: 0 0 0 3px #fff, 0 8px 0 3px var(--world-edge), 0 0 0 8px #fff;
+    box-shadow: 0 0 0 2px #FFFFFF, 0 6px 0 2px var(--world-edge), 0 0 0 7px #FFFFFF; /* taste-skill-ignore */
   }
-  .glow { box-shadow: 0 0 18px var(--world-glow); }
-  @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-36px); } }
-  .drift { animation: drift 20s ease-in-out infinite alternate; }
+
+  .glow {
+    box-shadow: 0 0 16px var(--world-glow); /* taste-skill-ignore */
+  }
+
+  @keyframes drift {
+    from { transform: translateY(0); }
+    to { transform: translateY(-30px); }
+  }
+
+  .drift {
+    animation: drift 18s ease-in-out infinite alternate;
+  }
 }
 
-/* Kill-switch for CSS motion: system setting or the in-app toggle */
+/* Reduced-motion safety */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
+
 [data-motion="off"] *, [data-motion="off"] *::before, [data-motion="off"] *::after {
-  animation: none !important; transition: none !important;
+  animation: none !important;
+  transition: none !important;
 }

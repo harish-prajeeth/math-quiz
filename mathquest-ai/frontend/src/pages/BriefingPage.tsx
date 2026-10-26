@@ -139,7 +139,7 @@ export default function BriefingPage() {
                     {currentSlide.icon}
                   </div>
                   <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-ink/70">
+                    <span className="text-sm font-semibold text-ink/75">
                       Slide {slideIndex + 1} of {slides.length || 1} • {currentSlide.tag}
                     </span>
                     <h2 className="font-display text-2xl text-ink">
@@ -155,7 +155,7 @@ export default function BriefingPage() {
                       key={i}
                       type="button"
                       onClick={() => setSlideIndex(i)}
-                      className={`size-3 rounded-full border-2 border-ink transition-all ${
+                      className={`size-3 rounded-full border-2 border-ink transition-[transform,background-color] ${
                         i === slideIndex ? "bg-[var(--world-pop)] scale-125" : "bg-white"
                       }`}
                       aria-label={`Go to slide ${i + 1}`}

@@ -71,24 +71,57 @@ export default function VictoryPage() {
         {!opened && <p className="mt-3 font-semibold">Tap the chest to open it.</p>}
 
         {opened && (
-          <Panel className="mt-8 space-y-4 p-6" role="status">
+          <Panel className="mt-8 space-y-5 p-6" role="status">
             <div className="flex justify-center"><Stars count={res.stars} /></div>
-            <p className="font-display text-3xl tabular-nums">+{xpShown} XP</p>
-            <p className="text-lg">
-              {res.correctCount} of {res.totalQuestions} correct ({res.scorePercent}%). Best combo: x{res.bestCombo}.
-            </p>
-            {leveledUp && <p className="font-display text-2xl">Level up. You're now Level {res.playerLevel}.</p>}
+            
+            <div>
+              <p className="font-display text-4xl tabular-nums text-ink">+{xpShown} XP</p>
+              {leveledUp && (
+                <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border-2 border-emerald-600 text-emerald-950 font-display text-lg">
+                  Level Up! You reached Level {res.playerLevel}!
+                </div>
+              )}
+            </div>
+
+            {/* Structured 3-stat performance grid */}
+            <div className="grid grid-cols-3 gap-3 py-1">
+              <div className="p-3 rounded-2xl bg-white border-2 border-ink text-center">
+                <div className="text-xs font-bold text-ink/70">Accuracy</div>
+                <div className="font-display text-2xl text-ink">{res.scorePercent}%</div>
+              </div>
+              <div className="p-3 rounded-2xl bg-white border-2 border-ink text-center">
+                <div className="text-xs font-bold text-ink/70">Solved</div>
+                <div className="font-display text-2xl text-ink">{res.correctCount}/{res.totalQuestions}</div>
+              </div>
+              <div className="p-3 rounded-2xl bg-white border-2 border-ink text-center">
+                <div className="text-xs font-bold text-ink/70">Max Combo</div>
+                <div className="font-display text-2xl text-ink">x{res.bestCombo}</div>
+              </div>
+            </div>
+
             {earned.length > 0 && (
-              <div>
-                <p className="font-semibold">New trophies</p>
+              <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300">
+                <p className="font-display text-base text-amber-950">New Trophies Unlocked!</p>
                 <ul className="mt-2 flex flex-wrap justify-center gap-2">
-                  {earned.map((b) => <li key={b.id} className="tile bg-[var(--world-pop)] px-3 py-1 font-semibold">{b.title || (b as any).name}</li>)}
+                  {earned.map((b) => (
+                    <li key={b.id} className="tile bg-[var(--world-pop)] px-3 py-1 font-bold text-sm text-ink">
+                      {b.title || (b as any).name}
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
+
             <div className="flex flex-wrap justify-center gap-3 pt-2">
-              <GameButton onClick={() => navigate(`/quest/${res.missionId}`)}>Play again</GameButton>
-              <GameButton variant="secondary" onClick={() => navigate("/map")}>Back to the map</GameButton>
+              <GameButton onClick={() => navigate(`/quest/${res.missionId}`)}>
+                Play Again
+              </GameButton>
+              <GameButton variant="secondary" onClick={() => navigate("/passport")}>
+                Passport & Trophies
+              </GameButton>
+              <GameButton variant="secondary" onClick={() => navigate("/map")}>
+                World Map
+              </GameButton>
             </div>
           </Panel>
         )}
