@@ -7,8 +7,9 @@ export class ApiError extends Error {
   }
 }
 
+const RENDER_BACKEND_URL = 'https://mathquest-backend-6fcq.onrender.com';
 const envBase = (import.meta as any).env?.VITE_API_URL?.replace(/\/+$/, '');
-const API_BASE = envBase ? `${envBase}/api` : '/api';
+const API_BASE = envBase ? `${envBase}/api` : `${RENDER_BACKEND_URL}/api`;
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, options);
