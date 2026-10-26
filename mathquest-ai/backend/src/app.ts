@@ -8,6 +8,7 @@ import { InMemoryQuizSessionRepository } from './repositories/in-memory-quiz-ses
 import { PlayerRepository } from './repositories/player.repository';
 import { ProgressRepository } from './repositories/progress.repository';
 import path from 'path';
+import fs from 'fs';
 
 export function createApp() {
   const app = express();
@@ -84,7 +85,16 @@ export function createApp() {
     }
   });
 
-  // ─── Health Check ───
+  // ─── Health & Root Check ───
+  app.get('/', (_req, res) => {
+    res.json({
+      service: 'MathQuest AI Backend',
+      status: 'ok',
+      version: '1.0.0',
+      health: '/api/health',
+    });
+  });
+
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
@@ -93,19 +103,21 @@ export function createApp() {
     });
   });
 
-  // ─── Serve Frontend in Production ───
+  // ─── Serve Frontend in Production (if bundled) ───
   if (process.env.NODE_ENV === 'production') {
     const frontendPath = path.join(__dirname, '../../frontend/dist');
-    app.use(express.static(frontendPath));
+    if (fs.existsSync(frontendPath)) {
+      app.use(express.static(frontendPath));
 
-    // SPA fallback — serve index.html for non-API routes
-    app.get('{*path}', (req, res) => {
-      if (req.path.startsWith('/api')) {
-        res.status(404).json({ error: 'API endpoint not found' });
-        return;
-      }
-      res.sendFile(path.join(frontendPath, 'index.html'));
-    });
+      // SPA fallback — serve index.html for non-API routes
+      app.get('{*path}', (req, res) => {
+        if (req.path.startsWith('/api')) {
+          res.status(404).json({ error: 'API endpoint not found' });
+          return;
+        }
+        res.sendFile(path.join(frontendPath, 'index.html'));
+      });
+    }
   }
 
   // ─── 404 Handler for unmatched API routes ───

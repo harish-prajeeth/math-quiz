@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://mathquest-backend-6fcq.onrender.com/api/:path*"
+    }
+  ]
+}
