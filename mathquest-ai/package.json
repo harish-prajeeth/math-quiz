@@ -1,0 +1,25 @@
+{
+  "name": "mathquest-ai",
+  "version": "1.0.0",
+  "description": "MathQuest AI — Gamified Mathematics Mastery for Grades 5 & 6 Aligned with Georgia Standards",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev": "npm --prefix backend run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "test": "npm --prefix backend test",
+    "start": "npm --prefix backend start"
+  },
+  "keywords": [
+    "math",
+    "education",
+    "gamification",
+    "adaptive-learning",
+    "georgia-standards"
+  ],
+  "author": "",
+  "license": "ISC"
+}
