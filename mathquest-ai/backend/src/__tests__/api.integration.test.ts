@@ -10,6 +10,15 @@ describe('MathQuest API Endpoints Integration', () => {
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
     expect(res.body.uptime).toBeDefined();
+    expect(typeof res.body.dbConnected).toBe('boolean');
+  });
+
+  it('GET /api/db/status returns database diagnostics', async () => {
+    const res = await request(app).get('/api/db/status');
+    expect(res.status).toBe(200);
+    expect(res.body.mode).toBeDefined();
+    expect(typeof res.body.configured).toBe('boolean');
+    expect(typeof res.body.connected).toBe('boolean');
   });
 
   it('GET /api/topics returns list of topics', async () => {
@@ -76,5 +85,50 @@ describe('MathQuest API Endpoints Integration', () => {
     expect(resultsRes.body.results.completed).toBe(true);
     expect(resultsRes.body.results.totalQuestions).toBe(10);
     expect(Array.isArray(resultsRes.body.results.badges)).toBe(true);
+  });
+
+  it('supports Grade 6 quiz start without grade mismatch error', async () => {
+    const res = await request(app)
+      .post('/api/quiz/start')
+      .send({ topicId: 'g6-ratios', grade: 6 });
+
+    expect(res.status).toBe(201);
+    expect(res.body.sessionId).toBeDefined();
+    expect(res.body.firstQuestion).toBeDefined();
+  });
+
+  it('persists player XP, stars, and badges when quiz completes with playerId', async () => {
+    // 1. Create player
+    const playerRes = await request(app)
+      .post('/api/player')
+      .send({ grade: 5, nickname: 'Hero', avatarId: 2 });
+    expect(playerRes.status).toBe(200);
+    const playerId = playerRes.body.playerId;
+    expect(playerId).toBeDefined();
+
+    // 2. Start quiz with playerId
+    const startRes = await request(app)
+      .post('/api/quiz/start')
+      .send({ topicId: 'g5-decimals', grade: 5, playerId });
+    expect(startRes.status).toBe(201);
+    const sessionId = startRes.body.sessionId;
+
+    // 3. Answer 10 questions correctly
+    for (let i = 0; i < 10; i++) {
+      await request(app)
+        .post(`/api/quiz/${sessionId}/answer`)
+        .send({ selectedIndex: 0 });
+    }
+
+    // 4. Finalize results
+    const resultsRes = await request(app).get(`/api/quiz/${sessionId}/results`);
+    expect(resultsRes.status).toBe(200);
+
+    // 5. Query player progress and verify XP and stars are persisted!
+    const progRes = await request(app).get(`/api/player/${playerId}/progress`);
+    expect(progRes.status).toBe(200);
+    expect(progRes.body.xp).toBeGreaterThan(0);
+    expect(progRes.body.completedMissions['g5-decimals']).toBeDefined();
+    expect(progRes.body.badges.length).toBeGreaterThanOrEqual(1);
   });
 });

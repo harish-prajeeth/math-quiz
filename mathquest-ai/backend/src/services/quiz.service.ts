@@ -15,6 +15,7 @@ import { scoreAnswer, calculateBadges } from './scoring.service';
 import { getFallbackQuestions } from '../data/fallback-questions';
 import { getTopicById } from '../config/topics';
 import { calculateBossHp, pickHiddenOptions } from '../config/rewards';
+import { ProgressRepository } from '../repositories/progress.repository';
 
 const QUIZ_LENGTH = 10;
 const SESSION_TTL_MS = 30 * 60 * 1000; // 30 minutes
@@ -25,7 +26,11 @@ export class QuizService {
   /**
    * Start a new quiz session.
    */
-  async startQuiz(topicId: string, grade: number): Promise<{ sessionId: string; firstQuestion: ClientQuestion }> {
+  async startQuiz(
+    topicId: string,
+    grade: number,
+    playerId?: string
+  ): Promise<{ sessionId: string; firstQuestion: ClientQuestion }> {
     const topic = getTopicById(topicId);
     if (!topic) {
       throw new Error('INVALID_TOPIC');
@@ -51,6 +56,7 @@ export class QuizService {
       id: crypto.randomUUID(),
       topicId,
       grade,
+      playerId,
       questions,
       currentQuestionIndex: 0,
       answers: [],
@@ -236,6 +242,37 @@ export class QuizService {
     const xpEarned = session.score;
     const level = Math.floor(session.score / 150) + 1;
     const bossDefeated = stars >= 2;
+
+    // Persist player progress & achievements if player is linked
+    if (session.playerId) {
+      try {
+        const currentProgress = await ProgressRepository.getPlayerProgress(session.playerId);
+        const prevXp = currentProgress?.xp ?? 0;
+        const newTotalXp = prevXp + xpEarned;
+        const newPlayerLevel = Math.max(1, Math.floor(newTotalXp / 100) + 1);
+        const currentMissions = { ...(currentProgress?.completedMissions || {}) };
+        currentMissions[session.topicId] = Math.max(currentMissions[session.topicId] || 0, stars);
+
+        const badgeSlugs = new Set(currentProgress?.badges || ['first-quest']);
+        for (const b of badges) {
+          badgeSlugs.add(b.id);
+          await ProgressRepository.awardBadge(session.playerId, b.id);
+        }
+
+        await ProgressRepository.savePlayerProgress({
+          playerId: session.playerId,
+          playerLevel: newPlayerLevel,
+          xp: newTotalXp,
+          xpIntoLevel: newTotalXp % 100,
+          xpForNextLevel: 100,
+          completedMissions: currentMissions,
+          starsByTopic: currentMissions,
+          badges: Array.from(badgeSlugs),
+        });
+      } catch (err) {
+        console.warn('Could not persist player progress on quiz completion:', err);
+      }
+    }
 
     return {
       sessionId: session.id,

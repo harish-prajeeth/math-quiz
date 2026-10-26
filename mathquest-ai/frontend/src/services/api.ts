@@ -50,11 +50,12 @@ export const api = {
   badges: () =>
     request<BadgeDef[]>('/badges'),
 
-  startQuiz: async (playerId: string, topicId: string) => {
-    // Start quiz with topicId and default grade 5 or derived
+  startQuiz: async (playerId: string, topicId: string, grade?: number) => {
+    // Determine appropriate grade (Grade 5 or Grade 6) based on parameter or topic ID
+    const effectiveGrade = grade || (topicId.startsWith('g6') ? 6 : 5);
     const data = await request<{ sessionId: string; firstQuestion: any }>(
       '/quiz/start',
-      post({ topicId, grade: 5, playerId })
+      post({ topicId, grade: effectiveGrade, playerId })
     );
     return { sessionId: data.sessionId };
   },

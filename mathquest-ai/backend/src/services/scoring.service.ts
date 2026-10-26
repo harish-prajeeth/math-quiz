@@ -138,5 +138,48 @@ export function calculateBadges(
     });
   }
 
+  // Combo Starter
+  if ((session.bestCombo || 0) >= 5) {
+    badges.push({
+      id: 'combo-5',
+      name: 'Combo Starter',
+      description: 'Answer five questions correctly in a row.',
+      icon: '⚡',
+      earned: true,
+    });
+  }
+
+  // Perfect Quest (canonical alias)
+  if (correctCount === totalQuestions && totalQuestions > 0) {
+    badges.push({
+      id: 'perfect-quest',
+      name: 'Perfect Quest',
+      description: 'Answer all ten questions correctly.',
+      icon: '⭐',
+      earned: true,
+    });
+  }
+
+  // World Explorers
+  if (session.completed && session.grade === 5) {
+    badges.push({
+      id: 'jungle-explorer',
+      name: 'Jungle Explorer',
+      description: 'Complete a Grade 5 Jungle Quest.',
+      icon: '🍃',
+      earned: true,
+    });
+  }
+
+  if (session.completed && session.grade === 6) {
+    badges.push({
+      id: 'space-explorer',
+      name: 'Space Explorer',
+      description: 'Complete a Grade 6 Space Mission.',
+      icon: '🚀',
+      earned: true,
+    });
+  }
+
   return badges;
 }

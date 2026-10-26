@@ -7,6 +7,7 @@ import { QuizService } from './services/quiz.service';
 import { InMemoryQuizSessionRepository } from './repositories/in-memory-quiz-session.repository';
 import { PlayerRepository } from './repositories/player.repository';
 import { ProgressRepository } from './repositories/progress.repository';
+import { isDbConnected, getDbDiagnostics } from './db/pool';
 import path from 'path';
 import fs from 'fs';
 
@@ -100,7 +101,17 @@ export function createApp() {
       status: 'ok',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
+      dbConnected: isDbConnected(),
     });
+  });
+
+  app.get('/api/db/status', async (_req, res) => {
+    try {
+      const diag = await getDbDiagnostics();
+      res.json(diag);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
   });
 
   // ─── Serve Frontend in Production (if bundled) ───

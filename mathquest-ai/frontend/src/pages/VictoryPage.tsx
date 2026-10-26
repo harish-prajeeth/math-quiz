@@ -82,7 +82,7 @@ export default function VictoryPage() {
               <div>
                 <p className="font-semibold">New trophies</p>
                 <ul className="mt-2 flex flex-wrap justify-center gap-2">
-                  {earned.map((b) => <li key={b.id} className="tile bg-[var(--world-pop)] px-3 py-1 font-semibold">{b.title}</li>)}
+                  {earned.map((b) => <li key={b.id} className="tile bg-[var(--world-pop)] px-3 py-1 font-semibold">{b.title || (b as any).name}</li>)}
                 </ul>
               </div>
             )}

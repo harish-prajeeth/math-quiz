@@ -63,11 +63,17 @@ export async function initDatabase(): Promise<boolean> {
 
     // Automatically ensure initial schema exists
     try {
-      const migrationPath = path.join(__dirname, 'migrations', '001_initial_schema.sql');
-      if (fs.existsSync(migrationPath)) {
-        const sql = fs.readFileSync(migrationPath, 'utf8');
+      const candidatePaths = [
+        path.join(__dirname, 'migrations', '001_initial_schema.sql'),
+        path.join(__dirname, '..', '..', 'src', 'db', 'migrations', '001_initial_schema.sql'),
+        path.join(process.cwd(), 'src', 'db', 'migrations', '001_initial_schema.sql'),
+        path.join(process.cwd(), 'backend', 'src', 'db', 'migrations', '001_initial_schema.sql'),
+      ];
+      const validPath = candidatePaths.find(p => fs.existsSync(p));
+      if (validPath) {
+        const sql = fs.readFileSync(validPath, 'utf8');
         await pool.query(sql);
-        console.log('✅ PostgreSQL: Initial schema and badges verified.');
+        console.log(`✅ PostgreSQL: Initial schema and badges verified from ${validPath}`);
       }
     } catch (migErr) {
       console.warn('Notice: Migration auto-run check:', migErr);
@@ -78,5 +84,50 @@ export async function initDatabase(): Promise<boolean> {
     console.warn(`⚠️ PostgreSQL connection failed: ${err.message}. Falling back to in-memory mode.`);
     isConnected = false;
     return false;
+  }
+}
+
+export interface DbDiagnostics {
+  configured: boolean;
+  connected: boolean;
+  mode: 'postgres' | 'in-memory-fallback';
+  serverTime?: string;
+  tables?: string[];
+  error?: string;
+}
+
+export async function getDbDiagnostics(): Promise<DbDiagnostics> {
+  if (!pool) {
+    return {
+      configured: false,
+      connected: false,
+      mode: 'in-memory-fallback',
+      error: 'DATABASE_URL environment variable is not configured.',
+    };
+  }
+
+  try {
+    const timeRes = await pool.query('SELECT NOW()');
+    const tablesRes = await pool.query(`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public' 
+      ORDER BY table_name;
+    `);
+
+    return {
+      configured: true,
+      connected: true,
+      mode: 'postgres',
+      serverTime: timeRes.rows[0]?.now ? new Date(timeRes.rows[0].now).toISOString() : undefined,
+      tables: tablesRes.rows.map(r => r.table_name),
+    };
+  } catch (err: any) {
+    return {
+      configured: true,
+      connected: false,
+      mode: 'in-memory-fallback',
+      error: err.message,
+    };
   }
 }

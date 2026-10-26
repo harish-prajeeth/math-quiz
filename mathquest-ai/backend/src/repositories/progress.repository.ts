@@ -24,11 +24,16 @@ export interface BadgeRecord {
 const inMemoryProgress = new Map<string, PlayerProgressRecord>();
 
 const DEFAULT_BADGES: BadgeRecord[] = [
-  { id: 'first-quest', slug: 'first-quest', title: 'First Quest', description: 'Complete your first math quest.', hint: 'Finish any quest on the map.', icon: 'flag' },
-  { id: 'combo-5', slug: 'combo-5', title: 'Combo Starter', description: 'Answer five questions correctly in a row.', hint: 'Hit combo x5 in battle.', icon: 'zap' },
-  { id: 'perfect-quest', slug: 'perfect-quest', title: 'Perfect Quest', description: 'Answer all ten questions correctly.', hint: 'Score 10/10 on a quest.', icon: 'star' },
-  { id: 'jungle-explorer', slug: 'jungle-explorer', title: 'Jungle Explorer', description: 'Complete a Grade 5 Jungle Quest.', hint: 'Conquer the Vine Guardian.', icon: 'leaf' },
-  { id: 'space-explorer', slug: 'space-explorer', title: 'Space Explorer', description: 'Complete a Grade 6 Space Mission.', hint: 'Tame the Asteroid Beast.', icon: 'rocket' },
+  { id: 'first-quest', slug: 'first-quest', title: 'First Quest', description: 'Complete your first math quest.', hint: 'Finish any quest on the map.', icon: '🎯' },
+  { id: 'combo-5', slug: 'combo-5', title: 'Combo Starter', description: 'Answer five questions correctly in a row.', hint: 'Hit combo x5 in battle.', icon: '⚡' },
+  { id: 'perfect-quest', slug: 'perfect-quest', title: 'Perfect Quest', description: 'Answer all ten questions correctly.', hint: 'Score 10/10 on a quest.', icon: '⭐' },
+  { id: 'perfect-score', slug: 'perfect-score', title: 'Perfect Score', description: 'Answered every question correctly!', hint: 'Score 10/10 on a quest.', icon: '⭐' },
+  { id: 'jungle-explorer', slug: 'jungle-explorer', title: 'Jungle Explorer', description: 'Complete a Grade 5 Jungle Quest.', hint: 'Conquer the Vine Guardian.', icon: '🍃' },
+  { id: 'space-explorer', slug: 'space-explorer', title: 'Space Explorer', description: 'Complete a Grade 6 Space Mission.', hint: 'Tame the Asteroid Beast.', icon: '🚀' },
+  { id: 'math-explorer', slug: 'math-explorer', title: 'Math Explorer', description: 'Explored a new math topic!', hint: 'Try a new mission on the map.', icon: '🧭' },
+  { id: 'quest-complete', slug: 'quest-complete', title: 'Quest Complete', description: 'Finished all 10 questions in a quest.', hint: 'Complete all questions.', icon: '🏆' },
+  { id: 'rising-star', slug: 'rising-star', title: 'Rising Star', description: 'Scored over 70% in a quest.', hint: 'Get 7 or more questions right.', icon: '🌟' },
+  { id: 'hard-mode-hero', slug: 'hard-mode-hero', title: 'Hard Mode Hero', description: 'Answered a hard question correctly.', hint: 'Build a streak to reach Master tier.', icon: '💪' },
 ];
 
 export const ProgressRepository = {

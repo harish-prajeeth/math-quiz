@@ -92,13 +92,13 @@ export default function QuestPage() {
     started.current = true;
     (async () => {
       try {
-        const { sessionId: id } = await api.startQuiz(state.playerId!, missionId);
+        const { sessionId: id } = await api.startQuiz(state.playerId!, missionId, state.grade);
         setSessionId(id);
         await loadQuestion(id);
       } catch (e) { handleError(e); }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [missionId, state.playerId]);
+  }, [missionId, state.playerId, state.grade]);
 
   async function check() {
     if (phase.name !== "answering" || phase.selected === null || busy.current || !sessionId) return;

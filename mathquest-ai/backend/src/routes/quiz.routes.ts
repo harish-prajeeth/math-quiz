@@ -6,6 +6,7 @@ import { getTopicById } from '../config/topics';
 const startQuizSchema = z.object({
   topicId: z.string().min(1),
   grade: z.number().int().min(5).max(6),
+  playerId: z.string().optional(),
 });
 
 const answerSchema = z.object({
@@ -29,7 +30,7 @@ export function createQuizRouter(quizService: QuizService): Router {
         return;
       }
 
-      const { topicId, grade } = parsed.data;
+      const { topicId, grade, playerId } = parsed.data;
 
       // Verify topic exists
       const topic = getTopicById(topicId);
@@ -38,7 +39,7 @@ export function createQuizRouter(quizService: QuizService): Router {
         return;
       }
 
-      const result = await quizService.startQuiz(topicId, grade);
+      const result = await quizService.startQuiz(topicId, grade, playerId);
       res.status(201).json(result);
     } catch (err: any) {
       if (err.message === 'INVALID_TOPIC') {
@@ -152,6 +153,10 @@ export function createQuizRouter(quizService: QuizService): Router {
       }
       if (err.message === 'INVALID_OPTION_INDEX') {
         res.status(400).json({ error: 'INVALID_OPTION_INDEX' });
+        return;
+      }
+      if (err.message === 'HIDDEN_OPTION_SELECTED') {
+        res.status(400).json({ error: 'HIDDEN_OPTION_SELECTED', message: 'Cannot select an option eliminated by 50/50 powerup.' });
         return;
       }
       console.error('Error submitting answer:', err);

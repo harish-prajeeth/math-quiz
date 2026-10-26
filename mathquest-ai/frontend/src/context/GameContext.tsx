@@ -45,9 +45,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<GameState>(() => {
     try {
       const saved = localStorage.getItem(KEY);
-      if (saved) return { ...DEFAULT_STATE, ...JSON.parse(saved) };
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.playerId) return { ...DEFAULT_STATE, ...parsed };
+      }
     } catch {}
-    return DEFAULT_STATE;
+    return {
+      ...DEFAULT_STATE,
+      playerId: `explorer_${Math.random().toString(36).slice(2, 9)}`,
+    };
   });
 
   const world = state.grade === 6 ? 'space' : 'jungle';
